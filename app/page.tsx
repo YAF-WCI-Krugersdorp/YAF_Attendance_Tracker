@@ -2,6 +2,7 @@
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
+import QRGenerator from "@/app/components/QRGenerator";
 
 export default function Home() {
   const { theme } = useTheme();
@@ -30,6 +31,10 @@ export default function Home() {
           </Link>
         </div>
       </main>
+      <div className="flex flex-col items-center justify-center row-start-3">
+        <h1 className="text-2xl font-bold mb-4">Scan to Attend</h1>
+        <QRGenerator />
+      </div>
     </div>
   );
 }
