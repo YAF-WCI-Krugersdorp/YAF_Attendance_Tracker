@@ -48,8 +48,8 @@ export default function AttendanceForm() {
           <option value="" disabled>
             Select Gender
           </option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
         </select>
         <input
           name="phone"
@@ -67,8 +67,8 @@ export default function AttendanceForm() {
           <option value="" disabled>
             Select Status
           </option>
-          <option value="first-timer">First-timer</option>
-          <option value="regular">Regular</option>
+          <option value="First-Timer">First-Timer</option>
+          <option value="Regular">Regular</option>
         </select>
         <button
           type="submit"
