@@ -2,37 +2,34 @@
 import { db } from './firebase';
 import { collection, addDoc, query, where, getDocs, orderBy } from 'firebase/firestore';
 
-// Add attendance record
-export async function addAttendance(name, surname, phone, status) {
-  const timestamp = new Date().toISOString();
+// Add attendance record (matches Flask's insert_attendance)
+export const addAttendance = async (data) => {
   await addDoc(collection(db, 'attendance'), {
-    name,
-    surname,
-    phone,
-    status,
-    timestamp
+    ...data,
+    timestamp: new Date().toISOString()
   });
-}
+};
 
-// Get filtered attendance
-export async function getAttendance(filters = {}) {
+// Get filtered records (matches Flask's get_filtered_attendance)
+export const getAttendance = async (filters = {}) => {
   let q = query(collection(db, 'attendance'), orderBy('timestamp', 'desc'));
   
   if (filters.name) {
-    q = query(q, where('name', '>=', filters.name), where('name', '<=', filters.name + '\uf8ff'));
+    q = query(q, where('name', '>=', filters.name), 
+                 where('name', '<=', filters.name + '\uf8ff'));
   }
   if (filters.status) {
     q = query(q, where('status', '==', filters.status));
   }
   if (filters.date) {
-    const start = new Date(filters.date);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(filters.date);
-    end.setHours(23, 59, 59, 999);
-    q = query(q, where('timestamp', '>=', start.toISOString()), 
-               where('timestamp', '<=', end.toISOString()));
+    const date = new Date(filters.date);
+    const nextDay = new Date(date);
+    nextDay.setDate(date.getDate() + 1);
+    
+    q = query(q, where('timestamp', '>=', date.toISOString()),
+                 where('timestamp', '<', nextDay.toISOString()));
   }
 
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => doc.data());
-}
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
