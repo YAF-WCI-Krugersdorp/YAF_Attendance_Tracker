@@ -21,6 +21,9 @@ export const getAttendance = async (filters = {}) => {
   if (filters.status) {
     q = query(q, where('status', '==', filters.status));
   }
+  if (filters.gender) {
+    q = query(q, where('gender', '==', filters.gender));
+  }
   if (filters.date) {
     const date = new Date(filters.date);
     const nextDay = new Date(date);

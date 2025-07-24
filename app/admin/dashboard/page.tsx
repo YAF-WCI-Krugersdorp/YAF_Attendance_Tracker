@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 interface AttendanceRecord {
   name: string;
   surname: string;
+  gender: string;
   phone: string;
   status: string;
   timestamp: string;
@@ -13,7 +14,9 @@ interface AttendanceRecord {
 
 interface AttendanceFilters {
   name?: string;
-  // Add more filter fields as needed
+  gender?: string;
+  status?: string;
+  date?: string; 
 }
 
 export default function AdminDashboard() {
@@ -31,6 +34,7 @@ export default function AdminDashboard() {
         const mapped = data.map((item: any) => ({
           name: item.name || '',
           surname: item.surname || '',
+          gender: item.gender || '', // Add this
           phone: item.phone || '',
           status: item.status || '',
           timestamp: item.timestamp || '',
@@ -50,10 +54,11 @@ export default function AdminDashboard() {
 
   const handleExport = () => {
     const csv = [
-      ['Name', 'Surname', 'Phone', 'Status', 'Timestamp'],
+      ['Name', 'Surname', 'Gender', 'Phone', 'Status', 'Timestamp'], // Add Gender to CSV header
       ...records.map(r => [
         escapeCSV(r.name),
         escapeCSV(r.surname),
+        escapeCSV(r.gender), // Add gender to CSV rows
         escapeCSV(r.phone),
         escapeCSV(r.status),
         escapeCSV(r.timestamp)
@@ -77,6 +82,24 @@ export default function AdminDashboard() {
           onChange={(e) => setFilters({ ...filters, name: e.target.value })}
           aria-label="Filter by name"
         />
+        <input
+          placeholder="Filter by gender"
+          value={filters.gender || ''}
+          onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
+          aria-label="Filter by gender"
+        />
+        <input
+          placeholder="Filter by status"
+          value={filters.status || ''}
+          onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+          aria-label="Filter by status"
+        />
+        <input
+          placeholder="Filter by date (YYYY-MM-DD)"
+          value={filters.date || ''}
+          onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+          aria-label="Filter by date"
+        />
         {/* Add other filter controls */}
       </div>
 
@@ -87,6 +110,7 @@ export default function AdminDashboard() {
           <tr>
             <th>Name</th>
             <th>Surname</th>
+            <th>Gender</th> {/* Add this */}
             <th>Phone</th>
             <th>Status</th>
             <th>Timestamp</th>
@@ -95,13 +119,14 @@ export default function AdminDashboard() {
         <tbody>
           {records.length === 0 ? (
             <tr>
-              <td colSpan={5} style={{ textAlign: 'center' }}>No records found.</td>
+              <td colSpan={6} style={{ textAlign: 'center' }}>No records found.</td>
             </tr>
           ) : (
             records.map((r, idx) => (
               <tr key={idx}>
                 <td>{r.name}</td>
                 <td>{r.surname}</td>
+                <td>{r.gender}</td> {/* Add this */}
                 <td>{r.phone}</td>
                 <td>{r.status}</td>
                 <td>{r.timestamp}</td>

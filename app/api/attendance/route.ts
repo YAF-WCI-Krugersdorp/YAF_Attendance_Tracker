@@ -6,7 +6,8 @@ export async function GET(request: Request) {
   const filters = {
     name: searchParams.get('name'),
     status: searchParams.get('status'),
-    date: searchParams.get('date')
+    date: searchParams.get('date'),
+    gender: searchParams.get('gender'),
   };
   
   const records = await getAttendance(filters);

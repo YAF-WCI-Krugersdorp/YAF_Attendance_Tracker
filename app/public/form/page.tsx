@@ -24,13 +24,19 @@ export default function AttendanceForm() {
     <form onSubmit={handleSubmit}>
       <input name="name" placeholder="First Name" required />
       <input name="surname" placeholder="Last Name" required />
-      <select name="gender" defaultValue="male/female">
+      <select name="gender" defaultValue="" required>
+        <option value="" disabled>
+          Select Gender
+        </option>
         <option value="male">Male</option>
         <option value="female">Female</option>
       </select>
       <input name="phone" placeholder="Phone" type="tel" required />
-      <select name="status" defaultValue="present">
-        <option value="first-timer">first-timer</option>
+      <select name="status" defaultValue="" required>
+        <option value="" disabled>
+          Select Status
+        </option>
+        <option value="first-timer">First-timer</option>
         <option value="regular">Regular</option>
       </select>
       <button type="submit">Submit</button>
