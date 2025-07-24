@@ -12,6 +12,7 @@ export default function AttendanceForm() {
     await addAttendance({
       name: formData.get('name') as string,
       surname: formData.get('surname') as string,
+      gender: formData.get('gender') as string,
       phone: formData.get('phone') as string,
       status: formData.get('status') as string
     });
@@ -23,10 +24,14 @@ export default function AttendanceForm() {
     <form onSubmit={handleSubmit}>
       <input name="name" placeholder="First Name" required />
       <input name="surname" placeholder="Last Name" required />
+      <select name="gender" defaultValue="male/female">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
       <input name="phone" placeholder="Phone" type="tel" required />
       <select name="status" defaultValue="present">
-        <option value="present">Present</option>
-        <option value="absent">Absent</option>
+        <option value="first-timer">first-timer</option>
+        <option value="regular">Regular</option>
       </select>
       <button type="submit">Submit</button>
     </form>

@@ -5,7 +5,7 @@ export default function GratitudePage() {
     <div className="flex flex-col items-center justify-center min-h-screen gap-6">
       <h1 className="text-2xl font-bold text-green-700">Thank You!</h1>
       <p className="text-lg text-center max-w-md">
-        Your attendance has been recorded successfully. We appreciate your participation!
+        Your attendance has been recorded successfully. Thank you for gracing us with your presence!
       </p>
       <Link
         href="/"
