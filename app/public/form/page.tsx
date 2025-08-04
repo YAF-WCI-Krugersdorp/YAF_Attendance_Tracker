@@ -1,23 +1,45 @@
 'use client';
 import { addAttendance } from '@/firestore';
 import { useRouter } from 'next/navigation';
+import { useState,FormEvent } from 'react';
+
 
 export default function AttendanceForm() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
+    setError(null);
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name') as string;
 
-    await addAttendance({
-      name: formData.get('name') as string,
-      surname: formData.get('surname') as string,
-      gender: formData.get('gender') as string,
-      phone: formData.get('phone') as string,
-      status: formData.get('status') as string
-    });
+    try {
+      const result = await addAttendance({
+        name: formData.get('name') as string,
+        surname: formData.get('surname') as string,
+        gender: formData.get('gender') as string,
+        phone: formData.get('phone') as string,
+        status: formData.get('status') as string
+      });
 
-    router.push(`/public/gratitude?name=${encodeURIComponent(formData.get('name') as string)}`);
+      // Both methods for redundancy
+      router.push(`/public/gratitude?name=${encodeURIComponent(name)}`);
+      window.location.href = `/public/gratitude?name=${encodeURIComponent(name)}`;
+      
+    } catch (err: unknown) {
+      let errorMessage = 'Submission failed. Please try again.';
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      setError(errorMessage);
+      console.error('Submission error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -70,11 +92,20 @@ export default function AttendanceForm() {
           <option value="First-Timer">First-Timer</option>
           <option value="Regular">Regular</option>
         </select>
+       {error && (
+          <div className="text-red-600 mb-4">
+            {error} - Please try again or contact support
+          </div>
+        )}
+
         <button
           type="submit"
-          className="mt-2 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold transition-colors shadow focus:outline-none focus:ring-2 focus:ring-red-400"
+          disabled={isSubmitting}
+          className={`mt-2 py-2 rounded bg-red-600 text-white font-semibold ${
+            isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'
+          }`}
         >
-          Submit
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </button>
       </form>
     </div>
