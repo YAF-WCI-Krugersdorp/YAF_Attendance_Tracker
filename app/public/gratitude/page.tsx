@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Suspense } from 'react';
 import { useSearchParams } from "next/navigation";
 
-// Wrap the part that uses useSearchParams in a separate component
 function GratitudeContent() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
