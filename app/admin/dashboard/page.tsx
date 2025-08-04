@@ -1,6 +1,7 @@
 'use client';
-import { getAttendance } from '@/firestore';
+import { getAttendance } from '../../../firestore';
 import { useState, useEffect } from 'react';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 // Types for better safety
 interface AttendanceRecord {
@@ -74,6 +75,7 @@ export default function AdminDashboard() {
   };
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen py-10 px-4 bg-gray-100 dark:bg-gray-900">
       <div className="max-w-5xl mx-auto bg-white dark:bg-black rounded-xl shadow-lg p-8 border border-red-200 dark:border-red-700">
         <h1 className="text-3xl font-bold text-red-700 dark:text-red-400 mb-8 text-center">Admin Attendance Dashboard</h1>
@@ -154,5 +156,6 @@ export default function AdminDashboard() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
